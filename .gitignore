@@ -1,0 +1,62 @@
+# === PYTHON ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+
+# === ENTORNOS VIRTUALES ===
+venv/
+ENV/
+env/
+.venv/
+*.env
+
+# === SECRETOS Y CONFIG LOCAL ===
+.env
+*.key
+credentials.json
+config.local.py
+*.pem
+
+# === MODELOS Y ARCHIVOS GRANDES (¡CRÍTICO!) ===
+*.bin
+*.safetensors
+*.pt
+*.pth
+*.onnx
+*.gguf
+*.ggml
+*.ckpt
+*.index
+models/
+checkpoints/
+downloads/
+*.zip
+*.tar.gz
+*.7z
+*.parquet
+
+# === LANGCHAIN / AGENTS ===
+.langchain/
+*.sqlite
+*.db
+memory/
+
+# === LOGS Y TEMPORALES ===
+*.log
+logs/
+tmp/
+temp/
+.DS_Store
+Thumbs.db
+
+# === IDE ===
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.pytest_cache/
