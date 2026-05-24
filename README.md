@@ -228,6 +228,7 @@ El sistema soporta múltiples backends de inferencia:
 - **Python**: 3.10 - 3.12
 - **RAM**: 16GB mínimo, 32GB recomendado
 - **Almacenamiento**: 50GB libres para modelos y caché
+- **Node.js**: 18+ (para servidores MCP)
 
 ### Instalación Rápida
 
@@ -247,23 +248,62 @@ pip install -r requirements.txt
 # Instalar Ollama (Linux)
 curl -fsSL https://ollama.com/install.sh | sh
 
-# Descargar modelos iniciales
-ollama pull glm4:9b-chat-q4_K_M
-ollama pull glm-edge:1.5b-chat
-ollama pull internvl2:8b
+# Descargar modelos recomendados para RTX 3090
+ollama pull qwen3.5:latest        # Agente principal (6.6 GB) ⭐
+ollama pull deepseek-r1:latest    # Razonamiento (5.2 GB)
+ollama pull qwen3-vl:latest       # Visión multi-modal (6.1 GB)
+ollama pull glm-ocr:latest        # OCR ligero (2.2 GB)
+ollama pull gemma4:latest         # Alternativa general (9.6 GB)
+
+# Copiar configuración de ejemplo
+cp config.example.yaml config.yaml
 ```
 
-### Configuración Inicial
+### Ejecución del Sistema
+
+El sistema puede ejecutarse en tres modos:
 
 ```bash
-# Ejecutar setup interactivo
-python src/setup.py
+# Modo API (servidor REST + WebSocket)
+python -m src.main api --port 8000
 
-# El sistema detectará automáticamente:
-# - GPU disponible y VRAM
-# - Modelos descargados
-# - Herramientas instaladas
-# - Y generará configuración óptima
+# Modo GUI (interfaz web Gradio)
+python -m src.main gui --port 7860
+
+# Modo CLI (consola interactiva)
+python -m src.main cli
+
+# Ver todos los modelos disponibles en tu sistema
+ollama list
+```
+
+### Comandos de la API
+
+Una vez iniciado el servidor API (`http://localhost:8000`):
+
+| Endpoint | Método | Descripción |
+|----------|--------|-------------|
+| `/` | GET | Información del servicio |
+| `/health` | GET | Verificar estado del servicio |
+| `/agents` | GET | Listar agentes disponibles |
+| `/chat` | POST | Enviar mensaje al agente |
+| `/chat/upload` | POST | Enviar mensaje con imagen |
+| `/ws/{user_id}` | WebSocket | Comunicación en tiempo real |
+| `/memory/{user_id}` | GET | Obtener memoria del usuario |
+
+### Ejemplo de uso con cURL
+
+```bash
+# Chat simple
+curl -X POST http://localhost:8000/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "¿Qué puedes hacer?", "user_id": "usuario1"}'
+
+# Subir imagen para análisis visual
+curl -X POST http://localhost:8000/chat/upload \
+  -F "message=Analiza esta imagen" \
+  -F "user_id=usuario1" \
+  -F "file=@documento.jpg"
 ```
 
 ### Archivo de Configuración (`config.yaml`)

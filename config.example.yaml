@@ -1,0 +1,138 @@
+# Configuración del Sistema de Agentes Inteligentes
+# Basada en modelos disponibles en Ollama para RTX 3090 24GB
+
+hardware:
+  gpu: "NVIDIA GeForce RTX 3090"
+  vram_gb: 24
+  cpu_cores: 12
+  ram_gb: 64
+
+models:
+  # Agente principal - usa el modelo más capaz que quepa en VRAM
+  primary:
+    name: "qwen3.5:latest"  # 6.6 GB - excelente balance capacidad/VRAM
+    backend: "ollama"
+    context_length: 32000
+    gpu_layers: 50
+    
+  # Sub-agentes para tareas específicas
+  subagents:
+    - name: "deepseek-r1:latest"  # 5.2 GB - razonamiento lógico
+      description: "Especialista en razonamiento y análisis lógico"
+      tools: ["shell", "filesystem"]
+      
+    - name: "gemma4:latest"  # 9.6 GB - capacidades generales
+      description: "Asistente general para tareas cotidianas"
+      tools: ["browser", "filesystem"]
+    
+    - name: "glm-ocr:latest"  # 2.2 GB - OCR especializado
+      description: "Especialista en reconocimiento óptico de caracteres"
+      tools: ["tesseract", "opencv"]
+
+  # Modelos visuales multi-modales
+  vision:
+    enabled: true
+    name: "qwen3-vl:latest"  # 6.1 GB - visión + lenguaje
+    backend: "ollama"
+    ocr_enabled: true
+    
+  # Modelos alternativos según disponibilidad de VRAM
+  alternatives:
+    high_capacity: "qwen3.6:latest"  # 23 GB - máxima capacidad (solo cuando no hay otros procesos)
+    balanced: "mistral-small3.1:latest"  # 15 GB - buen balance
+    lightweight: "glm-4.7-flash:latest"  # 19 GB cuantizado, rápido
+
+tools:
+  enabled:
+    - opencv        # Procesamiento de imágenes
+    - yolo          # Detección de objetos
+    - tesseract     # OCR tradicional
+    - whisper       # Transcripción de audio
+    - browser       # Navegación web
+    - shell         # Ejecución de comandos
+    - filesystem    # Acceso a archivos
+    - mcp           # Model Context Protocol
+    
+  yolo:
+    model: "yolov8n.pt"  # Nano para menor uso de VRAM
+    
+  tesseract:
+    lang: "eng+spa"
+    oem: 3
+    
+  whisper:
+    model: "small"  # Balance entre precisión y velocidad
+
+memory:
+  vector_store: "chroma"
+  persist_path: "./data/memory"
+  max_history: 1000
+  
+  # Configuración de MemPalace
+  mempalace:
+    enabled: true
+    episodic_memory:
+      enabled: true
+      max_entries: 5000
+      retention_days: 90
+    semantic_memory:
+      enabled: true
+      knowledge_graph: true
+      concept_linking: true
+    agent_specific:
+      enabled: true
+      isolated_contexts: true
+    user_preferences:
+      enabled: true
+      persist_path: "./data/preferences.yaml"
+
+mcp:
+  servers:
+    filesystem:
+      command: "npx"
+      args: ["-y", "@modelcontextprotocol/server-filesystem", "./workspace"]
+      
+    git:
+      command: "npx"
+      args: ["-y", "@modelcontextprotocol/server-git"]
+      
+    browser:
+      command: "npx"
+      args: ["-y", "@modelcontextprotocol/server-puppeteer"]
+
+sandbox:
+  default: "local"
+  backends:
+    - local
+    - docker
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  cors_origins: ["*"]
+
+gui:
+  host: "0.0.0.0"
+  port: 7860
+  theme: "soft"
+
+# Modelos recomendados según uso de VRAM
+# 
+# Para RTX 3090 24GB, puedes correr simultáneamente:
+# - qwen3.5:latest (6.6 GB) + deepseek-r1:latest (5.2 GB) + qwen3-vl:latest (6.1 GB) = ~18 GB
+# Dejando ~6 GB libres para sistema y herramientas visuales
+#
+# Modelos disponibles (de ollama list):
+# | Modelo                    | VRAM  | Uso Recomendado                    |
+# |---------------------------|-------|-------------------------------------|
+# | gemma4:26b                | 17 GB | Máxima capacidad (solo)            |
+# | gemma4:latest             | 9.6 GB| Agente principal balanceado        |
+# | deepseek-r1:latest        | 5.2 GB| Razonamiento lógico, sub-agente    |
+# | deepseek-ocr:latest       | 6.7 GB| OCR especializado                  |
+# | glm-ocr:latest            | 2.2 GB| OCR ligero, siempre activo         |
+# | qwen3.6:latest            | 23 GB | Máxima capacidad (casi toda VRAM)  |
+# | mistral-small3.1:latest   | 15 GB | Agente principal alternativo       |
+# | huihui_ai/qwen3-vl:8b     | 6.1 GB| Visión multi-modal                 |
+# | qwen3-vl:latest           | 6.1 GB| Visión + lenguaje                  |
+# | glm-4.7-flash:latest      | 19 GB | Respuestas rápidas                 |
+# | qwen3.5:latest            | 6.6 GB| Mejor balance capacidad/VRAM ⭐    |
