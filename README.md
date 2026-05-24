@@ -2,6 +2,10 @@
 
 <div align="center">
   <h3>Un sistema de agentes multi-modal que crece contigo, ejecutándose localmente en tu hardware</h3>
+  
+  <p>
+    <strong>🚀 <a href="COMO_FUNCIONA.md">GUÍA PASO A PASO PARA EMPEZAR</a></strong>
+  </p>
 </div>
 
 <div align="center">
@@ -10,6 +14,26 @@
   <a href="#hardware-recomendado"><img src="https://img.shields.io/badge/GPU-RTX%203090%2024GB-orange" alt="GPU"></a>
   <a href="LICENSE"><img src="https://img.shields.io/pypi/l/mit" alt="License"></a>
 </div>
+
+---
+
+## ⚡ Inicio Rápido
+
+¿Listo para empezar? Sigue estos 3 pasos:
+
+```bash
+# 1. Configurar entorno
+./setup_env.sh
+
+# 2. Iniciar sistema
+./run_system.sh
+
+# 3. Abrir navegador
+http://localhost:7860  # Dashboard visual
+http://localhost:8000/docs  # API docs
+```
+
+📖 **Para instrucciones detalladas desde cero, lee:** [CÓMO FUNCIONA ESTE SISTEMA](COMO_FUNCIONA.md)
 
 ---
 
