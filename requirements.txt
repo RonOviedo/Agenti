@@ -1,5 +1,56 @@
-langchain>=0.1.0
-langchain-community>=0.0.10
-ollama>=0.1.0
+# Core LangChain Deep Agents
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-community>=0.3.0
+langchain-ollama>=0.2.0
+
+# MCP (Model Context Protocol)
+mcp>=1.0.0
+mcp-cli>=0.1.0
+
+# Ollama
+ollama>=0.4.0
+
+# Visual Primitives
+opencv-python>=4.9.0
+ultralytics>=8.1.0  # YOLOv8
+pytesseract>=0.3.10
+pillow>=10.0.0
+imageio>=2.34.0
+
+# Audio Processing
+openai-whisper>=20231117  # Whisper original
+faster-whisper>=1.0.0    # Versión optimizada
+piper-tts>=1.0.0
+
+# Communication
+python-telegram-bot>=21.0
+discord.py>=2.3.0
+slack-sdk>=3.27.0
+
+# Memory & Vector Stores
+chromadb>=0.5.0
+qdrant-client>=1.9.0
+mempalace>=0.1.0
+
+# Web Framework & API
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+websockets>=12.0
+python-multipart>=0.0.9
+
+# GUI (Gradio para interfaz web fácil)
+gradio>=4.20.0
+
+# Utilities
+pydantic>=2.6.0
 python-dotenv>=1.0.0
-pydantic>=2.0.0
+pyyaml>=6.0.1
+httpx>=0.27.0
+aiofiles>=23.2.1
+schedule>=1.2.0
+
+# Development
+pytest>=8.0.0
+black>=24.0.0
+ruff>=0.3.0
