@@ -6,6 +6,10 @@ __pycache__/
 *.pyd
 
 # Environment
+.venv
+.venv/
+.venv.local
+*.venv.*
 .env
 .env.local
 *.env.*
